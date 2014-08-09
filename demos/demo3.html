@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<input id="volume" type="range" name="volume" value=".5" min="0" max="1" step=".01">
+
+<script>
+    var audio = new Audio('loudpipes.mp3');
+
+    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    var sourceNode = audioContext.createMediaElementSource(audio)
+
+    var gainNode = audioContext.createGain();
+    gainNode.gain.value = .5;
+
+    sourceNode.connect( gainNode );
+
+    gainNode.connect( audioContext.destination );
+
+   audio.play();
+
+
+    volume.oninput = function(a){
+        gainNode.gain.value = volume.value;
+    }
+
+
+</script>
+
+</body>
+</html>

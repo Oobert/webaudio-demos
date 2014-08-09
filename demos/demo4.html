@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+
+<script>
+    var audio = new Audio('test.mp3');
+
+    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    var sourceNode = audioContext.createMediaElementSource(audio)
+
+    var processor = audioContext.createScriptProcessor(2048, 1, 1);
+
+    sourceNode.connect(processor);
+    sourceNode.connect( audioContext.destination );
+    processor.connect(audioContext.destination)
+
+    var shot = false;
+    var shotCount = 0;
+    var shots = [];
+
+    processor.onaudioprocess = function(e){
+
+        var input = e.inputBuffer.getChannelData(0);
+        var total = 0;
+
+        for (var index = 0; index < input.length; index++){
+
+            total += Math.abs(input[index]);
+
+        }
+
+
+        var rms = Math.sqrt(total/input.length);
+
+        var decibel = 20 * (Math.log(rms) / Math.log(10));
+
+        if (decibel > -100)
+            console.log(rms, Math.log(rms));
+
+//        if (decibel > -100)
+//            console.log(decibel);
+
+        if (decibel > -7 && !shot) {
+            console.log('shot', shotCount);
+            shotCount++;
+            shot = true;
+            shots.push(performance.now());
+        }
+        else if (decibel < -8 ){
+            shot = false;
+        }
+
+        /*
+        .94
+        .21
+        .18
+        .20
+        .21
+        1.01
+
+         */
+
+    };
+
+    audio.play();
+
+</script>
+
+</body>
+</html>
