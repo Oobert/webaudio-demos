@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<button onclick="play()">Play</button>
+<button onclick="stop()">Stop</button>
+
+<script>
+
+    var source;
+    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    function getData() {
+        source = audioContext.createBufferSource();
+        var request = new XMLHttpRequest();
+
+        request.open('GET', 'loudpipes.mp3', true);
+
+        request.responseType = 'arraybuffer';
+
+
+        request.onload = function() {
+            var audioData = request.response;
+
+            audioContext.decodeAudioData(audioData, function(buffer) {
+                        var myBuffer = buffer;
+                        source.buffer = myBuffer;
+
+                        source.connect(audioContext.destination);
+                        source.loop = true;
+                    },
+
+                    function(e){console.log("Error with decoding audio data" + e.err)});
+
+        }
+
+        request.send();
+    }
+
+
+    function play(){
+        source.start(0);
+    }
+
+    function stop(){
+        source.stop(0);
+    }
+
+    getData();
+
+</script>
+
+</body>
+</html>
