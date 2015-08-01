@@ -4,7 +4,18 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body>
+<body style="background-color: black; color: white;">
+
+<div style="width:300px;
+	height:200px;
+	position:absolute;
+	left:50%;
+	top:50%;
+	">
+    <div id="shotList">
+
+    </div>
+</div>
 
 
 <script>
@@ -35,19 +46,19 @@
 
         }
 
-
         var rms = Math.sqrt(total/input.length);
 
         var decibel = 20 * (Math.log(rms) / Math.log(10));
 
-        if (decibel > -100)
-            console.log(rms, Math.log(rms));
+        //if (decibel > -100)
+//            console.log(rms, Math.log(rms));
 
 //        if (decibel > -100)
-//            console.log(decibel);
+       //     console.log(decibel);
 
         if (decibel > -7 && !shot) {
             console.log('shot', shotCount);
+            shotList.innerHTML = shotList.innerHTML + 'Shot: ' + shotCount + '<br />';
             shotCount++;
             shot = true;
             shots.push(performance.now());

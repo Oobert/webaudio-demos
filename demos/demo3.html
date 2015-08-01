@@ -4,16 +4,25 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body>
+<body style="background-color: black">
 
-<input id="volume" type="range" name="volume" value=".5" min="0" max="1" step=".01">
+<div style="width:300px;
+	height:200px;
+	position:absolute;
+	left:50%;
+	top:50%;
+	">
+    <input id="volume" type="range" name="volume" value=".5" min="0" max="1" step=".01" style="width: 300px;">
+</div>
+
+
 
 <script>
-    var audio = new Audio('loudpipes.mp3');
-
+    var audio = new Audio('Crackling_Fire.mp3');
+    audio.loop = true;
     var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    var sourceNode = audioContext.createMediaElementSource(audio)
+    var sourceNode = audioContext.createMediaElementSource(audio);
 
     var gainNode = audioContext.createGain();
     gainNode.gain.value = .5;

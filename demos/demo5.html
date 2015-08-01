@@ -12,9 +12,10 @@
 	left:50%;
 	top:50%;
 	">
-    <button style="zoom: 3" onclick="play()">Play</button>
-    <button style="zoom: 3" onclick="stop()">Stop</button>
+    <button onclick="Killbrowser()">Bring the pain!</button>
+
 </div>
+
 
 <script>
 
@@ -25,7 +26,7 @@
         source = audioContext.createBufferSource();
         var request = new XMLHttpRequest();
 
-        request.open('GET', 'horned_owl-Mike_Koenig-1945374932.mp3', true);
+        request.open('GET', 'Classic.mp3', true);
 
         request.responseType = 'arraybuffer';
 
@@ -35,10 +36,22 @@
 
             audioContext.decodeAudioData(audioData, function(buffer) {
                         var myBuffer = buffer;
-                        source.buffer = myBuffer;
-
-                        source.connect(audioContext.destination);
-                        source.loop = true;
+                        
+						
+						var frameCount = audioContext.sampleRate * (14/20);
+						  var numberOfChannels = myBuffer.numberOfChannels;
+						  var paddingBuffer = audioContext.createBuffer(1, frameCount, audioContext.sampleRate);
+						  for (var i=0; i<numberOfChannels; i++) {
+							var clickData = paddingBuffer.getChannelData(i);
+							
+							clickData.set(myBuffer.getChannelData(i));
+						  };
+						  
+						  
+						  source.connect(audioContext.destination);
+						  source.buffer = paddingBuffer;
+						  source.loop = true;
+						
                     },
 
                     function(e){console.log("Error with decoding audio data" + e.err)});
@@ -49,15 +62,22 @@
     }
 
 
-    function play(){
+    function Killbrowser(){
         source.start(0);
-    }
 
-    function stop(){
-        source.stop(0);
+        setTimeout(function () {
+
+            var index = 0;
+            while(index < 10000){
+                console.log(index);
+                index++;
+            }
+
+        }, 1000);
     }
 
     getData();
+
 
 </script>
 
