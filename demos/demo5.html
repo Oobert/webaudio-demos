@@ -35,24 +35,22 @@
             var audioData = request.response;
 
             audioContext.decodeAudioData(audioData, function(buffer) {
-                        var myBuffer = buffer;
-                        
-						
-						var frameCount = audioContext.sampleRate * (14/20);
-						  var numberOfChannels = myBuffer.numberOfChannels;
-						  var paddingBuffer = audioContext.createBuffer(1, frameCount, audioContext.sampleRate);
-						  for (var i=0; i<numberOfChannels; i++) {
-							var clickData = paddingBuffer.getChannelData(i);
-							
-							clickData.set(myBuffer.getChannelData(i));
-						  };
-						  
-						  
-						  source.connect(audioContext.destination);
-						  source.buffer = paddingBuffer;
-						  source.loop = true;
-						
-                    },
+                var myBuffer = buffer;
+
+                var frameCount = audioContext.sampleRate * (14/20);
+                var numberOfChannels = myBuffer.numberOfChannels;
+                var paddingBuffer = audioContext.createBuffer(1, frameCount, audioContext.sampleRate);
+                for (var i=0; i<numberOfChannels; i++) {
+                    var clickData = paddingBuffer.getChannelData(i);
+                    clickData.set(myBuffer.getChannelData(i));
+                };
+
+
+                source.connect(audioContext.destination);
+                source.buffer = paddingBuffer;
+                source.loop = true;
+
+            },
 
                     function(e){console.log("Error with decoding audio data" + e.err)});
 
